@@ -35,7 +35,6 @@ export async function createCommunity({
     const newCommunity = new Community({
       id,
       name,
-      username,
       image,
       bio,
       createdBy: user._id, // Use the mongoose ID of the user
