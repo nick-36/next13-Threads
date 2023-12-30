@@ -16,37 +16,46 @@ interface Params {
   bio: string;
 }
 
-export const createCommunity = async ({
+export async function createCommunity({
   id,
   name,
   username,
-  createdById,
   image,
   bio,
-}: Params): Promise<void> => {
-  connectToDB();
+  createdById,
+}: Params) {
   try {
-    const user = await User.findById(createdById);
+    connectToDB();
+
+    // Find the user with the provided unique id
+    const user = await User.findOne({ id: createdById });
 
     if (!user) {
       throw new Error("User not found"); // Handle the case if the user with the id is not found
     }
 
-    const newCommunity = await Community.create({
+    const newCommunity = new Community({
+      id,
       name,
       username,
-      createdBy: user._id,
       image,
       bio,
+      createdBy: user._id, // Use the mongoose ID of the user
     });
+
     const createdCommunity = await newCommunity.save();
+
+    // Update User model
     user.communities.push(createdCommunity._id);
     await user.save();
+
     return createdCommunity;
-  } catch (error: any) {
-    throw new Error(`Failed to create thread: ${error.message}`);
+  } catch (error) {
+    // Handle any errors
+    console.error("Error creating community:", error);
+    throw error;
   }
-};
+}
 
 export async function fetchCommunityDetails(id: string) {
   try {
@@ -107,10 +116,10 @@ export const fetchCommunities = async ({
   pageSize = 10,
   sortBy = -1,
 }: {
-  searchString: string;
+  searchString?: string;
   pageSize: number;
   pageNumber: number;
-  sortBy: SortOrder;
+  sortBy?: SortOrder;
 }) => {
   connectToDB();
 

@@ -1,9 +1,10 @@
-    "use server";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Thread from "../models/thread.model";
+import Community from "../models/community.model";
 
 export const fetchAllThreads = async (
   pageNumber: number = 1,
@@ -57,26 +58,43 @@ interface Params {
   path: string;
 }
 
-export const createThread = async ({
-  author,
+export async function createThread({
   text,
+  author,
+  communityId,
   path,
-}: Params): Promise<void> => {
-  connectToDB();
+}: Params) {
   try {
+    connectToDB();
+
+    const communityIdObject = await Community.findOne(
+      { id: communityId },
+      { _id: 1 }
+    );
+
     const createdThread = await Thread.create({
       text,
       author,
-      community: null,
+      community: communityIdObject, 
     });
+
+    // Update User model
     await User.findByIdAndUpdate(author, {
       $push: { threads: createdThread._id },
     });
+
+    if (communityIdObject) {
+      // Update Community model
+      await Community.findByIdAndUpdate(communityIdObject, {
+        $push: { threads: createdThread._id },
+      });
+    }
+
     revalidatePath(path);
   } catch (error: any) {
     throw new Error(`Failed to create thread: ${error.message}`);
   }
-};
+}
 
 export const fetchThreadById = async (id: string) => {
   connectToDB();

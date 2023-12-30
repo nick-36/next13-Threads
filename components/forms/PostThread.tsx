@@ -16,6 +16,7 @@ import { ThreadValidation } from "@/lib/Validation/threadValidation";
 import * as z from "zod";
 import { usePathname, useRouter } from "next/navigation";
 import { createThread } from "@/lib/actions/thread.actions";
+import { useOrganization } from "@clerk/nextjs";
 
 interface PostThreadProps {
   userId: string;
@@ -30,13 +31,15 @@ const PostThread = ({ userId }: PostThreadProps) => {
       author: userId,
     },
   });
+  const { organization } = useOrganization();
+  console.log(organization, "oraganization");
   async function onSubmit(values: z.infer<typeof ThreadValidation>) {
     try {
       await createThread({
         author: values.author,
         text: values.thread,
         path: pathname,
-        communityId: null,
+        communityId: organization ? organization?.id : null,
       });
     } catch (error) {
       console.log(error);
