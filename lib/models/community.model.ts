@@ -9,11 +9,6 @@ const CommunitySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  username: {
-    type: String,
-    unique: true,
-    required: true,
-  },
   image: String,
   bio: String,
   createdBy: {
@@ -35,7 +30,6 @@ const CommunitySchema = new mongoose.Schema({
 });
 
 const Community =
-  mongoose.models.Community ||
-  mongoose.model("Community", CommunitySchema);
+  mongoose.models.Community || mongoose.model("Community", CommunitySchema);
 
 export default Community;

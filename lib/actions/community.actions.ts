@@ -11,7 +11,6 @@ interface Params {
   id: string | number | Record<string, string>[];
   createdById: string | number | Record<string, string>[];
   name: string | number | Record<string, string>[];
-  username?: string;
   image: string | number | Record<string, string>[];
   bio: string;
 }
@@ -19,7 +18,6 @@ interface Params {
 export async function createCommunity({
   id,
   name,
-  username,
   image,
   bio,
   createdById,
