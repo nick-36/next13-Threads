@@ -113,11 +113,13 @@ export const POST = async (request: Request) => {
     try {
       // Resource: https://clerk.com/docs/reference/backend-api/tag/Organization-Memberships#operation/CreateOrganizationMembership
       // Show what evnt?.data sends from above resource
-      const { organization, public_user_data } = evnt?.data;
-      console.log("created", evnt?.data);
+      const { organization, public_user_data }: any = evnt?.data;
 
       // @ts-ignore
-      await addMemberToCommunity(organization.id, public_user_data.user_id);
+      await addMemberToCommunity({
+        memberId: public_user_data.user_id,
+        communityId: organization.id,
+      });
 
       return NextResponse.json(
         { message: "Invitation accepted" },
@@ -138,11 +140,14 @@ export const POST = async (request: Request) => {
     try {
       // Resource: https://clerk.com/docs/reference/backend-api/tag/Organization-Memberships#operation/DeleteOrganizationMembership
       // Show what evnt?.data sends from above resource
-      const { organization, public_user_data } = evnt?.data;
+      const { organization, public_user_data }: any = evnt?.data;
       console.log("removed", evnt?.data);
 
       // @ts-ignore
-      await removeUserFromCommunity(public_user_data.user_id, organization.id);
+      await removeUserFromCommunity({
+        memberId: public_user_data.user_id,
+        communityId: organization.id,
+      });
 
       return NextResponse.json({ message: "Member removed" }, { status: 201 });
     } catch (err) {
