@@ -163,6 +163,7 @@ export const addMemberToCommunity = async ({
   memberId: string;
   communityId: string;
 }) => {
+  connectToDB();
   try {
     const community = await Community.findOne({ id: communityId });
 
@@ -199,6 +200,8 @@ export const removeUserFromCommunity = async ({
   memberId: string;
   communityId: string;
 }) => {
+  connectToDB();
+
   try {
     const communityIdObject = await Community.findOne(
       { id: communityId },
@@ -266,7 +269,6 @@ export async function deleteCommunity(communityId: string) {
     const deletedCommunity = await Community.findOneAndDelete({
       id: communityId,
     });
-
     if (!deletedCommunity) {
       throw new Error("Community not found");
     }

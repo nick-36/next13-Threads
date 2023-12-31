@@ -14,10 +14,14 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
 
   const communityInfo = await fetchCommunityDetails(id);
 
+  if (!communityInfo) {
+    return console.log("No Community Found!");
+  }
+
   return (
     <section>
       <ProfileHeader
-        accountId={communityInfo.id}
+        accountId={communityInfo?.id}
         authUserId={user.id}
         name={communityInfo.name}
         imgUrl={communityInfo.image}
