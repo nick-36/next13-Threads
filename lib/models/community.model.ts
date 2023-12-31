@@ -9,8 +9,12 @@ const CommunitySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+  },
   image: String,
-  bio: String,
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

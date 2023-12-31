@@ -71,8 +71,8 @@ export const POST = async (request: Request) => {
       await createCommunity({
         id,
         name,
+        username: slug,
         image: logo_url || image_url,
-        bio: "org bio",
         createdById: created_by,
       });
 

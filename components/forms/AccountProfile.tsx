@@ -36,17 +36,7 @@ interface AccountProfileProps {
 }
 const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const { startUpload } = useUploadThing("media", {
-    onClientUploadComplete: () => {
-      alert("uploaded successfully!");
-    },
-    onUploadError: () => {
-      alert("error occurred while uploading");
-    },
-    onUploadBegin: () => {
-      alert("upload has begun");
-    },
-  });
+  const { startUpload } = useUploadThing("media");
   const router = useRouter();
   const pathname = usePathname();
   console.log(user, "user");
@@ -125,7 +115,7 @@ const AccountProfile = ({ user, btnTitle }: AccountProfileProps) => {
                     width={96}
                     height={96}
                     priority
-                    className="rounded-full object-contain"
+                    className="rounded-full aspect-square object-cover shadow-2xl"
                   />
                 ) : (
                   <Image

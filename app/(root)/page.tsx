@@ -2,12 +2,25 @@ import { fetchAllThreads } from "@/lib/actions/thread.actions";
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs";
 import ThreadCard from "@/components/cards/ThreadCard";
-export default async function Home() {
+import { fetchUser } from "@/lib/actions/user.actions";
+import { redirect } from "next/navigation";
+import Pagination from "@/components/shared/Pagination";
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
   const user = await currentUser();
 
-  if (!user) return console.log("No User Found!");
+  if (!user) return null;
 
-  const result = await fetchAllThreads(1, 20);
+  const userInfo = await fetchUser(user.id);
+  if (!userInfo?.onboarded) redirect("/onboarding");
+
+  const result = await fetchAllThreads(
+    searchParams.page ? +searchParams.page : 1,
+    20
+  );
   return (
     <>
       <h1 className="head-text text-left">Home</h1>
@@ -32,12 +45,11 @@ export default async function Home() {
           </>
         )}
       </section>
-
-      {/* <Pagination
-      path='/'
-      pageNumber={searchParams?.page ? +searchParams.page : 1}
-      isNext={result.isNext}
-    /> */}
+      <Pagination
+        path="/"
+        pageNumber={searchParams?.page ? +searchParams.page : 1}
+        isNext={result.isNext}
+      />
     </>
   );
 }

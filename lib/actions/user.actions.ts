@@ -91,7 +91,7 @@ export const fetchUsers = async ({
 }: {
   pageNumber?: number;
   pageSize?: number;
-  searchString: string;
+  searchString: string | undefined;
   userId: string;
   sortBy?: SortOrder;
 }) => {

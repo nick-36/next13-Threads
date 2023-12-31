@@ -6,6 +6,7 @@ import { communityTabs, profileTabs } from "@/constants";
 import ThreadsTabContent from "@/components/shared/ThreadTabContent";
 import { fetchCommunityDetails } from "@/lib/actions/community.actions";
 import UserCard from "@/components/cards/UserCard";
+import { fetchUser } from "@/lib/actions/user.actions";
 
 const Page = async ({ params: { id } }: { params: { id: string } }) => {
   const user = await currentUser();
@@ -17,7 +18,6 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
   if (!communityInfo) {
     return console.log("No Community Found!");
   }
-
   return (
     <section>
       <ProfileHeader

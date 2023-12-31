@@ -64,8 +64,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: CommentProps) => {
                     layout="fill"
                     src={currentUserImg}
                     alt="profiel image"
-                    objectFit="cover"
-                    className="rounded-full"
+                    className="rounded-full object-cover"
                   />
                 </div>
               </FormLabel>

@@ -12,14 +12,14 @@ interface Params {
   createdById: string | number | Record<string, string>[];
   name: string | number | Record<string, string>[];
   image: string | number | Record<string, string>[];
-  bio: string;
+  username: string | number | Record<string, string>[];
 }
 
 export async function createCommunity({
   id,
   name,
+  username,
   image,
-  bio,
   createdById,
 }: Params) {
   try {
@@ -36,7 +36,7 @@ export async function createCommunity({
       id,
       name,
       image,
-      bio,
+      username,
       createdBy: user._id, // Use the mongoose ID of the user
     });
 
