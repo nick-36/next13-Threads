@@ -26,6 +26,10 @@ export const fetchAllThreads = async (
         model: "User",
       })
       .populate({
+        path: "community",
+        model: Community,
+      })
+      .populate({
         path: "children",
         populate: [
           {
@@ -75,7 +79,7 @@ export async function createThread({
     const createdThread = await Thread.create({
       text,
       author,
-      community: communityIdObject, 
+      community: communityIdObject,
     });
 
     // Update User model

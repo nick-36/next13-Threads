@@ -102,7 +102,7 @@ export const POST = async (request: Request) => {
       console.log(err);
 
       return NextResponse.json(
-        { message: "Internal Server Error" },
+        { message: "Internal Server Error", data: err },
         { status: 500 }
       );
     }
@@ -127,7 +127,7 @@ export const POST = async (request: Request) => {
       console.log(err);
 
       return NextResponse.json(
-        { message: "Internal Server Error" },
+        { message: "Internal Server Error", data: err },
         { status: 500 }
       );
     }
@@ -149,7 +149,7 @@ export const POST = async (request: Request) => {
       console.log(err);
 
       return NextResponse.json(
-        { message: "Internal Server Error" },
+        { message: "Internal Server Error", data: err },
         { status: 500 }
       );
     }
@@ -171,7 +171,7 @@ export const POST = async (request: Request) => {
       console.log(err);
 
       return NextResponse.json(
-        { message: "Internal Server Error" },
+        { message: "Internal Server Error", data: err },
         { status: 500 }
       );
     }
@@ -196,7 +196,7 @@ export const POST = async (request: Request) => {
       console.log(err);
 
       return NextResponse.json(
-        { message: "Internal Server Error" },
+        { message: "Internal Server Error", data: err },
         { status: 500 }
       );
     }

@@ -34,6 +34,13 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
               </TabsTrigger>
             ))}
           </TabsList>
+          <TabsContent value="threads" className="w-full text-light-1">
+            <ThreadsTabContent
+              currentUserId={user.id}
+              accountId={communityInfo._id}
+              accountType="Community"
+            />
+          </TabsContent>
           <TabsContent value="members" className="mt-9 w-full text-light-1">
             <section className="mt-9 flex flex-col gap-10">
               {communityInfo.members.map((member: any) => (

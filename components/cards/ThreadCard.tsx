@@ -53,8 +53,7 @@ function ThreadCard({
                 src={author.image}
                 alt="user_community_image"
                 fill
-                objectFit="cover"
-                className="cursor-pointer rounded-full"
+                className="cursor-pointer rounded-full  object-cover"
                 priority
               />
             </Link>

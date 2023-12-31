@@ -58,7 +58,7 @@ export async function fetchCommunityDetails(id: string) {
   try {
     connectToDB();
 
-    const communityDetails = await Community.findById(id).populate([
+    const communityDetails = await Community.findOne({ id }).populate([
       "createdBy",
       {
         path: "members",
