@@ -188,9 +188,6 @@ export const POST = async (request: Request) => {
       // Resource: https://clerk.com/docs/reference/backend-api/tag/Organizations#operation/DeleteOrganization
       // Show what evnt?.data sends from above resource
       const { id } = evnt?.data;
-      console.log("deleted", evnt?.data);
-
-      // @ts-ignore
       await deleteCommunity(id);
 
       return NextResponse.json(
@@ -198,7 +195,7 @@ export const POST = async (request: Request) => {
         { status: 201 }
       );
     } catch (err) {
-      console.log(err);
+      console.log("ERROR__", err);
 
       return NextResponse.json(
         { message: "Internal Server Error", data: err },

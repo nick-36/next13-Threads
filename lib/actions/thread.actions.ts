@@ -76,6 +76,7 @@ export async function createThread({
       { _id: 1 }
     );
 
+    console.log("COMMUNITY_ID -- ", communityId, communityIdObject);
     const createdThread = await Thread.create({
       text,
       author,

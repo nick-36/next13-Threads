@@ -1,6 +1,4 @@
 "use server";
-
-import { revalidatePath } from "next/cache";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import Thread from "../models/thread.model";
@@ -25,6 +23,12 @@ export async function createCommunity({
   try {
     connectToDB();
 
+    const existingCommunity = await Community.findOne({ id });
+
+    if (existingCommunity) {
+      throw new Error("Community with the same id already exists");
+    }
+
     // Find the user with the provided unique id
     const user = await User.findOne({ id: createdById });
 
@@ -35,16 +39,21 @@ export async function createCommunity({
     const newCommunity = new Community({
       id,
       name,
-      image,
       username,
+      image,
       createdBy: user._id, // Use the mongoose ID of the user
     });
 
     const createdCommunity = await newCommunity.save();
-
+    const isUserPartOfCommunity = user.communities.some((communityId: any) =>
+      communityId.equals(createdCommunity._id)
+    );
+    console.log("ISUSERPARTOFCOMMUNITY", isUserPartOfCommunity);
     // Update User model
-    user.communities.push(createdCommunity._id);
-    await user.save();
+    if (!isUserPartOfCommunity) {
+      user.communities.push(createdCommunity._id);
+      await user.save();
+    }
 
     return createdCommunity;
   } catch (error) {
@@ -261,27 +270,37 @@ export async function updateCommunityInfo(
   }
 }
 
-export async function deleteCommunity(communityId: string) {
+export async function deleteCommunity(
+  communityId: string | number | Record<string, string>[]
+) {
   try {
-    connectToDB();
-
+    await connectToDB();
+    const communityIdObject = await Community.findOne(
+      { id: communityId },
+      { _id: 1 }
+    );
     // Find the community by its ID and delete it
     const deletedCommunity = await Community.findOneAndDelete({
       id: communityId,
     });
+
+    console.log(deletedCommunity, "___DELETED");
+
     if (!deletedCommunity) {
       throw new Error("Community not found");
     }
 
     // Delete all threads associated with the community
-    await Thread.deleteMany({ community: communityId });
+    await Thread.deleteMany({ community: communityIdObject._id });
 
     // Find all users who are part of the community
-    const communityUsers = await User.find({ communities: communityId });
+    const communityUsers = await User.find({
+      communities: communityIdObject._id,
+    });
 
     // Remove the community from the 'communities' array for each user
     const updateUserPromises = communityUsers.map((user) => {
-      user.communities.pull(communityId);
+      user.communities.pull(communityIdObject._id);
       return user.save();
     });
 
